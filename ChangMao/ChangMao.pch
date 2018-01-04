@@ -1,0 +1,128 @@
+//
+//  ChangMao.pch
+//  ChangMao
+//
+//  Created by 景睦科技 on 2017/10/17.
+//  Copyright © 2017年 景睦科技. All rights reserved.
+//
+
+#ifndef ChangMao_pch
+#define ChangMao_pch
+
+#import "AppTools.h"
+#import "UIColor+Hex.h"
+#import "UIView+Extension.h"
+#import "UIButton+Extension.h"
+#import "YJWDataRequest.h"
+#import "Reachability.h"
+#import <WebKit/WebKit.h>
+
+#import "IQKeyboardManager.h"
+#import "MBProgressHUD.h"
+#import <AFNetworking.h>
+#import "Masonry.h"
+#import "UIImageView+WebCache.h"
+#import <MJRefresh.h>
+#import <MJExtension.h>
+#import <AlipaySDK/AlipaySDK.h>
+#import "Order.h"
+#import "DataSigner.h"
+#import "WXApi.h"
+#import "WXApiObject.h"
+
+#define SCREEN_WIDTH   [UIScreen mainScreen].bounds.size.width    //屏幕宽度
+#define SCREENH_HEIGHT [UIScreen mainScreen].bounds.size.height   //屏幕高度
+
+/*****************************    别人的      **************************************/
+//#define   PARTNER             @"2088721840506018"
+//// 商户收款的支付宝账号
+//#define   SELLER              @"2482301898@qq.com"
+////商户（RSA）私钥 pkcs-8
+//#define   RSA_PRIVATE         @"MIICdwIBADANBgkqhkiG9w0BAQEFAASCAmEwggJdAgEAAoGBAJ7FhU1CvTJN39IkE8dXiX7OpGAUuqjP8QY/cf2W3iOwt+Bw4I3opcxU4fTlHCGZJj93SiI9e5vtYGR2n3ML+GFYz6OtyqDZYePvs6A5CXATrPotLWWfatVviFfMGSXPmsB8GHtGSSlEJfKZcXiISGwnvI/li3/ZsYf8w58GeAxrAgMBAAECgYEAkzc0fcn3IdChSvkWucxJ+iFiupAd72833gIwEOG1wcQXCu2+2PYx3X+LMAbMCb82frx+Kbd2iMMWkLCI8iTUPQBY9lLV8ydqVJaZKtBBNnEQn6m22I38jg5D7lnWOITmyQzqSUASGoQ2ox50TB2scnKGmwbKITrAoj5Q9vQDYzECQQDX+C9yuPpDNyvEBGReLTODIWWqCh40VT6Gr4s3EqbVtyYlbQcQhMM0W0tHyQrRijiN3JPYGIy+ARbu6Fb8etrzAkEAvDNHIzxk21Oa0Ol8ojGSlbseYAjVgj3gXn+G7Jt7CnTvy/YiP41TiV9saBf28BtCBHaNafqEk7vhIcuA1yj2qQJBANT5VjEX4ROvsGUYv7FvecDyikLov2h0N7iyG+MvbX6Lof5+Sd0sTyOuc8pSo2yHlcWvo8wSSZiFkov+aumIbakCQEqFC1/6Y/0sh5q9OSqH8oDzTL2+AbzGf3cri+NYVUn4r5LVbQ45CaDVdflps8+zG1rlDm2uUpykwio9iFCp2bECQBSjy1Vnp4Ea7mTXt5ssnaH2qLu0dCpG7o26Sp00tLpu+erruSGXHHwuLgyJFmN+n36OvGkmZhdPGV9PUb+FrVw="
+
+//支付宝
+// 合作商户ID。用签约支付宝账号登录ms.alipay.com后，在账户信息页面获取。
+#define   PARTNER             @"2088721355545166"
+// 商户收款的支付宝账号
+#define   SELLER              @"18838599996@163.com"
+//商户（RSA）私钥 pkcs-8
+#define   RSA_PRIVATE  @"MIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBAJeomFBQOEOqnTYeMpb5GmdTLOU5Rdgbvr38ejwbSlH82zLWLGxSGUBNW1shCCtTDb0R++YynNmwDYGuzhrRIhUX+YPxiICyKNvH7T6hOVFp6F1G0bmquBaeygDHQ8yoFmB5PFmV9VITrWJBrZu7W9SkmJ2jGFl+VIpv/TnwUsVBAgMBAAECgYEAiVf2sG0ltyoQ+8y3NgBcCAzMUL7gYMknoXi/3iU81iku/cf2LRbgpVopDMtKUaoCfCKIRL27TG1infoHz0NsH9HkkP9CE/p9aBHusepP8xVoSZxRlIIPO/nigRZuKZdlLMXmJ4rB6191PYN2IbpKYoIXyoz0p7rSpAcnan2+FY0CQQDql5Qqp14552PXfanqlprbS3GODqSI25m8Lx1hABa8seGTqYTmney6c4Na41lw6TtfLMBc/ISYg0A0EtT6yGsTAkEApX+QuHsyZpUXwUVMTj7CP7vQDspZ6xrRytutxsqP7xlFR3KNY/FJOnX2y1d0agMWVpUwASV8d96N2KR/nn2k2wJAUbtHyuiO4pukZGKKvYmFIFwTjwu49VmVIURE9xOh2FIdJmYMQJDK9lbib9r/wV/w6ILd7keoJr6rsrjQ7SLAcwJAHS6VMjJm/LelbKrvfYyLa/mOAk2j9VTRUVfTGI53Os3V7XdBfzH4m5pZXhmZqWfJ9JJx2IHnpKtVj7HR3vyAqQJAAW/zd7oMf4HfquWiD+0UQ647CzTAN8hN/0VzHIkF0WqURW3ePqni/H/RTYgK4MpZFNZP/hJdy/1ZKGPlBSVgaA=="
+
+//------项目中使用到的常量TAG等
+
+#define LOGINED_USER @"loginedUser" // 用于保存登录
+#define ISLOGINED @"isLogined"
+#define SAVED_USER @"savedUser" // 用于保存所有账号
+
+
+//=======================  通知 =======================
+#define ShowLoginViewNotification                   @"ShowLoginViewNotification"
+#define UserLoginSuccessNotification                @"UserLoginSuccessNotification"
+#define TabberHomeBtnClickedNotification            @"TabberHomeBtnClickedNotification"      //tabber首页按钮被点击
+#define TabberFenleiBtnClickedNotification        @"TabberFenleiBtnClickedNotification" //tabber商业中心按钮被点击
+
+
+
+//颜色
+#define RGB(r, g, b)   [UIColor colorWithRed:r/255.0 green:g/255.0 blue:b/255.0 alpha:1]
+#define kColorTextDarkGray  RGB(100,100,100)   //稍深的灰色字体
+#define kColorTableBG   [UIColor groupTableViewBackgroundColor]
+#define bgColor [UIColor colorWithRed:230.0/255.0 green:230.0/255.0 blue:230.0/255.0 alpha:1] //背景颜色
+
+
+//=======================  登录注册   调试没问题 =======================
+
+// mobile=15713861029&type=1 1 注册 2 忘记密码
+#define MessageCode_URL         @"http://www.168zgcm.com/api/user.php?action=act_register_code&"  //获取短信验证码
+
+// mobile=15713861029&code=706774&password=123456&password1=123456&p_mobile=
+#define Register_URL            @"http://www.168zgcm.com/api/user.php?action=act_register&"        //注册
+
+// username=admin9@qq.com&password=xjd520
+#define Login_URL               @"http://www.168zgcm.com/api/user.php?action=act_login&"            //登录
+
+// mobile=15713861029
+#define FindPswOne_URL             @"http://www.168zgcm.com/api/user.php?action=forget_password1&"     //忘记密码1
+
+// mobile=15713861029&code=123456
+#define FindPswTwo_URL             @"http://www.168zgcm.com/api/user.php?action=forget_password2&"     //忘记密码2
+
+// mobile=15713861029&password=123456
+#define FindPswThree_URL             @"http://www.168zgcm.com/api/user.php?action=forget_password3&"   //忘记密码3
+
+//=======================  个人信息 =======================
+
+
+
+
+//=======================  URL =======================
+
+#define Home_URL                @"http://www.168zgcm.com/mobile/"              //畅贸首页
+
+#define Fenlei_URL              @"http://www.168zgcm.com/mobile/catalog.php"   //畅贸分类
+
+#define Newest_URL              @"http://www.168zgcm.com/mobile/search.php?"   //畅贸最新
+
+#define ShoppingCar_URL         @"http://www.168zgcm.com/mobile/flow.php?"     //畅贸购物车 uid=3
+
+#define My_URL                  @"http://www.168zgcm.com/mobile/user.php?"    //畅贸我的 uid=3
+
+//=======================  网络错误处理 =======================
+
+#define NetworkError  @"访问失败"
+
+#define NoNetWorkErrorCode      -1001
+#define NoNetWorkErrorMessage  @"网络不给力，请检查网络" //-1001网络超时
+
+#define ServerDataErrorCode     -100
+#define ServerDataErrorMessage  @"访问失败"
+
+
+//Release模式下屏蔽NSLog,不输出日志.
+//#ifndef __OPTIMIZE__
+//#define NSLog(...) NSLog(__VA_ARGS__)
+//#else
+//#define NSLog(...) {}
+//#endif
+
+#endif /* ChangMao_pch */
